@@ -1,0 +1,17 @@
+.map-wrapper {
+  width: 90%;
+  margin: 30px auto;
+  text-align: center;
+}
+
+.map {
+  height: 500px;
+  width: 100%;
+  border-radius: 10px;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
