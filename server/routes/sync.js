@@ -1,11 +1,9 @@
 const express = require("express");
-
 const router = express.Router();
 
-// Temporary in-memory storage
-let records = [];
+const SyncRecord = require("../models/SyncRecord");
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
   const { data } = req.body;
 
   if (!Array.isArray(data)) {
@@ -15,22 +13,30 @@ router.post("/", (req, res) => {
     });
   }
 
-  data.forEach((record) => {
-    const index = records.findIndex((r) => r.id === record.id);
-
-    if (index >= 0) {
-      // Last-write-wins
-      records[index] = record;
-    } else {
-      records.push(record);
+  try {
+    for (const record of data) {
+      await SyncRecord.findOneAndUpdate(
+        { id: record.id },
+        record,
+        {
+          upsert: true,
+          new: true,
+        }
+      );
     }
-  });
 
-  res.json({
-    success: true,
-    message: "Records synced successfully",
-    count: data.length,
-  });
+    res.json({
+      success: true,
+      message: "Records synced successfully",
+      count: data.length,
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
 });
 
 module.exports = router;
