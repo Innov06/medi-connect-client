@@ -1,6 +1,7 @@
 import AlertBanner from "./components/AlertBanner";
 import UserLocationMap from "./components/UserLocationMap";
 import SyncManager from "./components/SyncManager";
+import ReferralSlip from "./components/ReferralSlip";
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
       <AlertBanner />
       <UserLocationMap />
       <SyncManager />
+      <ReferralSlip />
     </>
   );
 }
