@@ -1,25 +1,42 @@
-import { FaExclamationTriangle } from "react-icons/fa";
 import "./AlertBanner.css";
 
-function AlertBanner({ warningSigns }) {
-  if (!warningSigns || warningSigns.length === 0) {
-    return null;
-  }
+export default function AlertBanner({
+  triage = {
+    urgent: true,
+    warnings: [
+      "High fever",
+      "Chest pain",
+      "Difficulty breathing",
+    ],
+    language: "hi",
+  },
+}) {
+  if (!triage.urgent) return null;
+
+  const translations = {
+    hi: {
+      "High fever": "तेज़ बुखार",
+      "Chest pain": "सीने में दर्द",
+      "Difficulty breathing": "सांस लेने में कठिनाई",
+    },
+    en: {
+      "High fever": "High fever",
+      "Chest pain": "Chest pain",
+      "Difficulty breathing": "Difficulty breathing",
+    },
+  };
+
+  const lang = translations[triage.language] || translations.en;
 
   return (
     <div className="alert-banner">
-      <div className="alert-header">
-        <FaExclamationTriangle />
-        <h2>Emergency Warning</h2>
-      </div>
+      <h2>⚠️ Emergency Warning</h2>
 
       <ul>
-        {warningSigns.map((item, index) => (
-          <li key={index}>{item}</li>
+        {triage.warnings.map((warning, index) => (
+          <li key={index}>{lang[warning] || warning}</li>
         ))}
       </ul>
     </div>
   );
 }
-
-export default AlertBanner;
