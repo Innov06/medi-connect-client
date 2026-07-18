@@ -3,11 +3,15 @@ const cors = require("cors");
 require("dotenv").config();
 
 const triageRoute = require("./routes/triage");
+const syncRoutes = require("./routes/sync");
+
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+app.use("/api/sync", syncRoutes);
 
 app.use("/api/triage", triageRoute);
 
