@@ -41,11 +41,14 @@ useEffect(() => {
     });
   };
 
-  const handleSubmit = async (e) => {
+ const [loading, setLoading] = useState(false);
+const [error, setError] = useState("");
+
+const handleSubmit = async (e) => {
   e.preventDefault();
 
   if (!formData.name || !formData.age || !formData.symptoms) {
-    alert("Please fill all required fields.");
+    setError("Please fill all required fields.");
     return;
   }
 
@@ -71,11 +74,11 @@ useEffect(() => {
     const link = document.createElement("a");
     link.href = url;
     link.download = "referral.pdf";
+
     document.body.appendChild(link);
     link.click();
     link.remove();
   } catch (err) {
-    console.error(err);
     setError("Failed to generate referral slip.");
   } finally {
     setLoading(false);
