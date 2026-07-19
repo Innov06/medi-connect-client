@@ -43,16 +43,52 @@ function MapView() {
 
   const [selectedResource, setSelectedResource] = useState(null);
   const [directions, setDirections] = useState([]);
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
 
+
+  // Offline fallback
   useEffect(() => {
-    const cached = localStorage.getItem("directions");
 
-    if (!navigator.onLine && cached) {
-      setDirections(JSON.parse(cached));
+    const handleOnline = () => {
+      setIsOffline(false);
+    };
+
+    const handleOffline = () => {
+      setIsOffline(true);
+
+      const cached = localStorage.getItem("directions");
+
+      if (cached) {
+        setDirections(JSON.parse(cached));
+      }
+    };
+
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+
+    // Load cached directions if already offline
+    if (!navigator.onLine) {
+      const cached = localStorage.getItem("directions");
+
+      if (cached) {
+        setDirections(JSON.parse(cached));
+      }
     }
+
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+
   }, []);
 
+
+
   const handleSelect = (resource) => {
+
     setSelectedResource(resource);
 
     const steps = [
@@ -61,13 +97,21 @@ function MapView() {
       `${t("reach")} ${resource.name}.`,
     ];
 
+
     setDirections(steps);
 
-    localStorage.setItem("directions", JSON.stringify(steps));
+
+    // Save directions for offline use
+    localStorage.setItem(
+      "directions",
+      JSON.stringify(steps)
+    );
   };
+
 
   return (
     <>
+
       <MapContainer
         center={userLocation}
         zoom={15}
@@ -76,10 +120,12 @@ function MapView() {
           width: "100%",
         }}
       >
+
         <TileLayer
           attribution="&copy; OpenStreetMap contributors"
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+
 
         {/* User Location */}
         <Marker position={userLocation}>
@@ -88,8 +134,11 @@ function MapView() {
           </Popup>
         </Marker>
 
+
+
         {/* Health Resources */}
         {resources.map((resource) => (
+
           <Marker
             key={resource.id}
             position={resource.position}
@@ -97,7 +146,9 @@ function MapView() {
               click: () => handleSelect(resource),
             }}
           >
+
             <Popup>
+
               <b>{resource.name}</b>
 
               <br />
@@ -117,42 +168,91 @@ function MapView() {
               <br />
 
               Click marker for directions.
+
             </Popup>
+
           </Marker>
+
         ))}
 
-        {/* Route */}
+
+
+        {/* Route Line */}
         {selectedResource && (
+
           <Polyline
-            positions={[userLocation, selectedResource.position]}
+            positions={[
+              userLocation,
+              selectedResource.position
+            ]}
           />
+
         )}
+
+
       </MapContainer>
 
+
+
       {/* Directions Panel */}
+
       {selectedResource && (
+
         <div
           style={{
-            marginTop: "20px",
-            padding: "15px",
-            border: "1px solid #ccc",
-            borderRadius: "10px",
+            marginTop:"20px",
+            padding:"15px",
+            border:"1px solid #ccc",
+            borderRadius:"10px",
           }}
         >
-          <h3>{t("directions")}</h3>
+
+          <h3>
+            {t("directions")}
+          </h3>
+
+
+          {isOffline && (
+
+            <p>
+              ⚠ Offline mode: Showing cached directions
+            </p>
+
+          )}
+
+
 
           <p>
-            <strong>{t("destination")}:</strong>{" "}
+
+            <strong>
+              {t("destination")}:
+            </strong>
+
+            {" "}
+
             {selectedResource.name}
+
           </p>
 
+
+
           <ol>
-            {directions.map((step, index) => (
-              <li key={index}>{step}</li>
+
+            {directions.map((step,index)=>(
+
+              <li key={index}>
+                {step}
+              </li>
+
             ))}
+
           </ol>
+
+
         </div>
+
       )}
+
     </>
   );
 }
