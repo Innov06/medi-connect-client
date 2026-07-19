@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import "./App.css";
 import ResourceList from "./components/ResourceList";
+import ConnectivityStatus from "./components/ConnectivityStatus";
+import PatientList from "./components/PatientList";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -81,6 +83,8 @@ function App() {
         </>
       )}
       <ResourceList />
+      <PatientList />
+      <ConnectivityStatus />
     </div>
   );
 }
