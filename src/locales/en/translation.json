@@ -1,0 +1,11 @@
+{
+  "title": "AI Triage",
+  "language": "Language",
+  "question1": "Do you have fever?",
+  "question2": "Do you have cough?",
+  "question3": "Do you have difficulty breathing?",
+  "yes": "Yes",
+  "no": "No",
+  "submit": "Submit",
+  "aiResponse": "AI Response"
+}
