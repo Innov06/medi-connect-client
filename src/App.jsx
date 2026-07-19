@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import "./App.css";
+import ResourceList from "./components/ResourceList";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -79,6 +80,7 @@ function App() {
           <p>{response}</p>
         </>
       )}
+      <ResourceList />
     </div>
   );
 }
