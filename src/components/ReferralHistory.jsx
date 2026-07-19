@@ -5,33 +5,26 @@ function ReferralHistory() {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    // Clear old cached data (optional while developing)
-    localStorage.removeItem("referrals");
+  async function loadReferrals() {
+    try {
+      const response = await fetch("http://localhost:5000/api/referrals");
 
-    const cached = localStorage.getItem("referrals");
+      const data = await response.json();
 
-    if (cached) {
-      setReferrals(JSON.parse(cached));
-    } else {
-      const sampleData = [
-        {
-          id: 1,
-          patient: "Rahul Kumar",
-          date: "2026-07-19",
-          file: "/referral.html",
-        },
-        {
-          id: 2,
-          patient: "Priya Singh",
-          date: "2026-07-15",
-          file: "/referral.html",
-        },
-      ];
+      setReferrals(data);
 
-      setReferrals(sampleData);
-      localStorage.setItem("referrals", JSON.stringify(sampleData));
+      localStorage.setItem("referrals", JSON.stringify(data));
+    } catch (error) {
+      const cached = localStorage.getItem("referrals");
+
+      if (cached) {
+        setReferrals(JSON.parse(cached));
+      }
     }
-  }, []);
+  }
+
+  loadReferrals();
+}, []); 
 
   const filtered = referrals.filter(
     (r) =>
@@ -87,7 +80,13 @@ function ReferralHistory() {
             download
             style={{ marginLeft: "10px" }}
           >
-            <button>Download</button>
+            <button onClick={() => window.open(item.file, "_blank")}>
+  View
+</button>
+
+<a href={item.file} download>
+  <button>Download</button>
+</a>
           </a>
         </div>
       ))}
