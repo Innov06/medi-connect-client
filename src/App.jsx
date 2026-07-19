@@ -1,10 +1,21 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import "./App.css";
-import ResourceList from "./components/ResourceList";
-import ConnectivityStatus from "./components/ConnectivityStatus";
+
 import PatientList from "./components/PatientList";
-import ReferralHistory from "./components/ReferralHistory";
+import React, { Suspense, lazy } from "react";
+
+const ReferralHistory = lazy(() =>
+  import("./components/ReferralHistory")
+);
+
+const ResourceList = lazy(() =>
+  import("./components/ResourceList")
+);
+
+const ConnectivityStatus = lazy(() =>
+  import("./components/ConnectivityStatus")
+);
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -83,10 +94,14 @@ function App() {
           <p>{response}</p>
         </>
       )}
-      <ResourceList />
+      
       <PatientList />
-      <ConnectivityStatus />
-      <ReferralHistory />
+      
+  <Suspense fallback={<p>Loading...</p>}>
+  <ReferralHistory />
+  <ResourceList />
+  <ConnectivityStatus />
+</Suspense>
     </div>
   );
 }
