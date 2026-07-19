@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { saveOfflineData } from "../utils/storage";
-
+import axios from "axios";
 function PatientForm() {
   const [formData, setFormData] = useState({
     name: "",
@@ -26,6 +26,42 @@ function PatientForm() {
 
     alert("Form submitted successfully.");
   };
+  const downloadPDF = async () => {
+  try {
+    const response = await axios.post(
+      "http://localhost:5000/api/referral",
+      {
+        name: formData.name,
+        age: formData.age,
+        symptoms: formData.symptoms,
+        urgency: "Medium",
+        facility: "Primary Health Centre",
+        language: localStorage.getItem("language") || "en",
+      },
+      {
+        responseType: "blob",
+      }
+    );
+
+    const url = window.URL.createObjectURL(
+      new Blob([response.data])
+    );
+
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = "referral.pdf";
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    link.remove();
+  } catch (error) {
+    console.error(error);
+    alert("Failed to generate PDF");
+  }
+};
 
   return (
     <form
@@ -68,6 +104,12 @@ function PatientForm() {
       <button type="submit">
         Submit
       </button>
+      <button
+  type="button"
+  onClick={downloadPDF}
+>
+  Download Referral PDF
+</button>
     </form>
   );
 }
