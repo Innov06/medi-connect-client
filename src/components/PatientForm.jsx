@@ -7,8 +7,14 @@ function PatientForm() {
     name: "",
     age: "",
     symptoms: "",
+    urgency: "Medium",
+    facility: "Primary Health Centre",
   });
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  // Handle input changes
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -16,24 +22,42 @@ function PatientForm() {
     });
   };
 
+  // Handle Submit button
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!formData.name || !formData.age || !formData.symptoms) {
+      setError("Please fill all required fields.");
+      return;
+    }
+
+    setError("");
+
+    // Save locally if offline
+    if (!navigator.onLine) {
+      saveOfflineData(formData);
+      alert("Offline: Patient data saved locally.");
+      return;
+    }
+
+    alert("Patient details submitted successfully.");
+  };
+
+  // Generate Referral PDF
+  const downloadPDF = async () => {
+    if (!formData.name || !formData.age || !formData.symptoms) {
+      setError("Please fill all required fields.");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
 
     // Save locally if offline
     if (!navigator.onLine) {
       saveOfflineData(formData);
       alert("Offline: Referral data saved locally.");
-      return;
-    }
-
-    alert("Form submitted successfully.");
-  };
-
-  const downloadPDF = async () => {
-    // Save locally instead of calling backend if offline
-    if (!navigator.onLine) {
-      saveOfflineData(formData);
-      alert("Offline: Referral data saved locally.");
+      setLoading(false);
       return;
     }
 
@@ -41,11 +65,7 @@ function PatientForm() {
       const response = await axios.post(
         "http://localhost:5000/api/referral",
         {
-          name: formData.name,
-          age: formData.age,
-          symptoms: formData.symptoms,
-          urgency: "Medium",
-          facility: "Primary Health Centre",
+          ...formData,
           language: localStorage.getItem("language") || "en",
         },
         {
@@ -63,11 +83,14 @@ function PatientForm() {
 
       document.body.appendChild(link);
       link.click();
-
       link.remove();
-    } catch (error) {
-      console.error(error);
-      alert("Failed to generate PDF");
+
+      alert("Referral PDF generated successfully.");
+    } catch (err) {
+      console.error(err);
+      setError("Failed to generate referral slip.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -80,8 +103,14 @@ function PatientForm() {
         display: "flex",
         flexDirection: "column",
         gap: "15px",
+        padding: "20px",
+        border: "1px solid #ddd",
+        borderRadius: "8px",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
       }}
     >
+      <h2 style={{ textAlign: "center" }}>Referral Form</h2>
+
       <input
         type="text"
         name="name"
@@ -109,6 +138,22 @@ function PatientForm() {
         required
       />
 
+      <input
+        type="text"
+        name="urgency"
+        placeholder="Urgency"
+        value={formData.urgency}
+        onChange={handleChange}
+      />
+
+      <input
+        type="text"
+        name="facility"
+        placeholder="Referral Facility"
+        value={formData.facility}
+        onChange={handleChange}
+      />
+
       <button type="submit">
         Submit
       </button>
@@ -116,9 +161,22 @@ function PatientForm() {
       <button
         type="button"
         onClick={downloadPDF}
+        disabled={loading}
       >
-        Download Referral PDF
+        {loading ? "Generating..." : "Create Referral Slip"}
       </button>
+
+      {error && (
+        <p
+          style={{
+            color: "red",
+            textAlign: "center",
+            margin: 0,
+          }}
+        >
+          {error}
+        </p>
+      )}
     </form>
   );
 }
