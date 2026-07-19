@@ -1,27 +1,30 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 function SymptomForm() {
+  const { t } = useTranslation();
+
   const [symptom, setSymptom] = useState("");
   const [error, setError] = useState("");
 
   const symptoms = [
-    "🤒 Fever",
-    "🤧 Cough",
-    "🤕 Headache",
-    "😷 Cold",
-    "🤢 Vomiting",
-    "🤮 Nausea",
-    "💩 Diarrhea",
-    "😵 Dizziness",
-    "😮‍💨 Breathing Problem",
-    "🤒 Body Pain",
+    t("fever"),
+    t("cough"),
+    t("headache"),
+    t("cold"),
+    t("vomiting"),
+    t("nausea"),
+    t("diarrhea"),
+    t("dizziness"),
+    t("breathing"),
+    t("bodypain"),
   ];
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!symptom) {
-      setError("Please select a symptom.");
+      setError(t("error"));
       return;
     }
 
@@ -31,9 +34,9 @@ function SymptomForm() {
 
   return (
     <form onSubmit={handleSubmit} style={{ marginTop: "20px" }}>
-      <h3>Symptom Form</h3>
+      <h3>{t("symptomForm")}</h3>
 
-      <label>Select Symptom</label>
+      <label>{t("selectSymptom")}</label>
 
       <select
         value={symptom}
@@ -45,7 +48,7 @@ function SymptomForm() {
           marginBottom: "10px",
         }}
       >
-        <option value="">Select</option>
+        <option value="">{t("select")}</option>
 
         {symptoms.map((item, index) => (
           <option key={index} value={item}>
@@ -61,7 +64,7 @@ function SymptomForm() {
       )}
 
       <button type="submit">
-        Submit
+        {t("submit")}
       </button>
     </form>
   );

@@ -2,5 +2,22 @@
   "title": "MediConnect Rural",
   "welcome": "Welcome",
   "share": "Share Referral",
-  "language": "Language"
+  "language": "Language",
+
+  "symptomForm": "Symptom Form",
+  "selectSymptom": "Select Symptom",
+  "submit": "Submit",
+  "select": "Select",
+  "error": "Please select a symptom.",
+
+  "fever": "🤒 Fever",
+  "cough": "🤧 Cough",
+  "headache": "🤕 Headache",
+  "cold": "😷 Cold",
+  "vomiting": "🤢 Vomiting",
+  "nausea": "🤮 Nausea",
+  "diarrhea": "💩 Diarrhea",
+  "dizziness": "😵 Dizziness",
+  "breathing": "😮‍💨 Breathing Problem",
+  "bodypain": "🤒 Body Pain"
 }

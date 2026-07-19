@@ -2,5 +2,22 @@
   "title": "मेडीकनेक्ट ग्रामीण",
   "welcome": "स्वागत है",
   "share": "रेफरल साझा करें",
-  "language": "भाषा"
+  "language": "भाषा",
+
+  "symptomForm": "लक्षण फ़ॉर्म",
+  "selectSymptom": "लक्षण चुनें",
+  "submit": "सबमिट करें",
+  "select": "चुनें",
+  "error": "कृपया एक लक्षण चुनें।",
+
+  "fever": "🤒 बुखार",
+  "cough": "🤧 खांसी",
+  "headache": "🤕 सिरदर्द",
+  "cold": "😷 जुकाम",
+  "vomiting": "🤢 उल्टी",
+  "nausea": "🤮 मतली",
+  "diarrhea": "💩 दस्त",
+  "dizziness": "😵 चक्कर",
+  "breathing": "😮‍💨 सांस लेने में तकलीफ",
+  "bodypain": "🤒 शरीर दर्द"
 }
