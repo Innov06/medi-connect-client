@@ -24,21 +24,28 @@ function PatientForm() {
       return;
     }
 
-    alert("Online: Ready to send to backend.");
+    alert("Form submitted successfully.");
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      onSubmit={handleSubmit}
+      style={{
+        maxWidth: "450px",
+        margin: "30px auto",
+        display: "flex",
+        flexDirection: "column",
+        gap: "15px",
+      }}
+    >
       <input
         type="text"
         name="name"
         placeholder="Patient Name"
         value={formData.name}
         onChange={handleChange}
+        required
       />
-
-      <br />
-      <br />
 
       <input
         type="number"
@@ -46,22 +53,21 @@ function PatientForm() {
         placeholder="Age"
         value={formData.age}
         onChange={handleChange}
+        required
       />
-
-      <br />
-      <br />
 
       <textarea
         name="symptoms"
         placeholder="Symptoms"
+        rows="4"
         value={formData.symptoms}
         onChange={handleChange}
+        required
       />
 
-      <br />
-      <br />
-
-      <button type="submit">Submit</button>
+      <button type="submit">
+        Submit
+      </button>
     </form>
   );
 }

@@ -1,31 +1,39 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
+const savedLanguage = localStorage.getItem("language") || "en";
+
 i18n.use(initReactI18next).init({
   resources: {
     en: {
       translation: {
-        title: "Home Care Guidance",
-        "Drink water": "Drink water",
-        Rest: "Rest",
-        "Take medicine": "Take medicine",
-        "Visit PHC if symptoms worsen":
-          "Visit PHC if symptoms worsen",
+        title: "MediConnect Rural",
       },
     },
+
     hi: {
       translation: {
-        title: "घरेलू देखभाल मार्गदर्शन",
-        "Drink water": "पानी पिएँ",
-        Rest: "आराम करें",
-        "Take medicine": "दवा लें",
-        "Visit PHC if symptoms worsen":
-          "लक्षण बढ़ने पर निकटतम PHC जाएँ",
+        title: "मेडीकनेक्ट ग्रामीण",
+      },
+    },
+
+    bn: {
+      translation: {
+        title: "মেডিকানেক্ট গ্রামীণ",
+      },
+    },
+
+    te: {
+      translation: {
+        title: "మెడికనెక్ట్ రూరల్",
       },
     },
   },
-  lng: "en",
+
+  lng: savedLanguage,
+
   fallbackLng: "en",
+
   interpolation: {
     escapeValue: false,
   },
