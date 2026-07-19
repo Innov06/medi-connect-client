@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import {
   MapContainer,
   TileLayer,
@@ -9,6 +10,8 @@ import {
 import "leaflet/dist/leaflet.css";
 
 function MapView() {
+  const { t } = useTranslation();
+
   const userLocation = [25.5941, 85.1376];
 
   const resources = [
@@ -53,9 +56,9 @@ function MapView() {
     setSelectedResource(resource);
 
     const steps = [
-      "Start from your current location.",
-      "Move towards the main road.",
-      `Reach ${resource.name}.`,
+      t("step1"),
+      t("step2"),
+      `${t("reach")} ${resource.name}.`,
     ];
 
     setDirections(steps);
@@ -85,7 +88,7 @@ function MapView() {
           </Popup>
         </Marker>
 
-        {/* Health Resource Markers */}
+        {/* Health Resources */}
         {resources.map((resource) => (
           <Marker
             key={resource.id}
@@ -118,7 +121,7 @@ function MapView() {
           </Marker>
         ))}
 
-        {/* Route Line */}
+        {/* Route */}
         {selectedResource && (
           <Polyline
             positions={[userLocation, selectedResource.position]}
@@ -126,7 +129,7 @@ function MapView() {
         )}
       </MapContainer>
 
-      {/* Directions */}
+      {/* Directions Panel */}
       {selectedResource && (
         <div
           style={{
@@ -136,10 +139,11 @@ function MapView() {
             borderRadius: "10px",
           }}
         >
-          <h3>Directions</h3>
+          <h3>{t("directions")}</h3>
 
           <p>
-            <strong>Destination:</strong> {selectedResource.name}
+            <strong>{t("destination")}:</strong>{" "}
+            {selectedResource.name}
           </p>
 
           <ol>

@@ -19,5 +19,10 @@
   "diarrhea": "💩 Diarrhea",
   "dizziness": "😵 Dizziness",
   "breathing": "😮‍💨 Breathing Problem",
-  "bodypain": "🤒 Body Pain"
+  "bodypain": "🤒 Body Pain",
+"directions": "Directions",
+"destination": "Destination",
+"step1": "Start from your current location.",
+"step2": "Move towards the main road.",
+"reach": "Reach"
 }
