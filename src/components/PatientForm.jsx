@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { saveOfflineData } from "../utils/storage";
 import axios from "axios";
+import { saveOfflineData } from "../utils/storage";
+
 function PatientForm() {
   const [formData, setFormData] = useState({
     name: "",
@@ -18,50 +19,57 @@ function PatientForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Save locally if offline
     if (!navigator.onLine) {
       saveOfflineData(formData);
-      alert("Offline: Data saved locally.");
+      alert("Offline: Referral data saved locally.");
       return;
     }
 
     alert("Form submitted successfully.");
   };
+
   const downloadPDF = async () => {
-  try {
-    const response = await axios.post(
-      "http://localhost:5000/api/referral",
-      {
-        name: formData.name,
-        age: formData.age,
-        symptoms: formData.symptoms,
-        urgency: "Medium",
-        facility: "Primary Health Centre",
-        language: localStorage.getItem("language") || "en",
-      },
-      {
-        responseType: "blob",
-      }
-    );
+    // Save locally instead of calling backend if offline
+    if (!navigator.onLine) {
+      saveOfflineData(formData);
+      alert("Offline: Referral data saved locally.");
+      return;
+    }
 
-    const url = window.URL.createObjectURL(
-      new Blob([response.data])
-    );
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/referral",
+        {
+          name: formData.name,
+          age: formData.age,
+          symptoms: formData.symptoms,
+          urgency: "Medium",
+          facility: "Primary Health Centre",
+          language: localStorage.getItem("language") || "en",
+        },
+        {
+          responseType: "blob",
+        }
+      );
 
-    const link = document.createElement("a");
+      const url = window.URL.createObjectURL(
+        new Blob([response.data])
+      );
 
-    link.href = url;
-    link.download = "referral.pdf";
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "referral.pdf";
 
-    document.body.appendChild(link);
+      document.body.appendChild(link);
+      link.click();
 
-    link.click();
-
-    link.remove();
-  } catch (error) {
-    console.error(error);
-    alert("Failed to generate PDF");
-  }
-};
+      link.remove();
+    } catch (error) {
+      console.error(error);
+      alert("Failed to generate PDF");
+    }
+  };
 
   return (
     <form
@@ -104,12 +112,13 @@ function PatientForm() {
       <button type="submit">
         Submit
       </button>
+
       <button
-  type="button"
-  onClick={downloadPDF}
->
-  Download Referral PDF
-</button>
+        type="button"
+        onClick={downloadPDF}
+      >
+        Download Referral PDF
+      </button>
     </form>
   );
 }
