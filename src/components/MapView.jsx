@@ -14,17 +14,26 @@ function MapView() {
   const resources = [
     {
       id: 1,
-      name: "Primary Health Center",
+      name: "🏥 Primary Health Center",
+      type: "Clinic",
+      address: "Patna, Bihar",
+      contact: "+91 9876543210",
       position: [25.5955, 85.1385],
     },
     {
       id: 2,
-      name: "Village Pharmacy",
+      name: "💊 Village Pharmacy",
+      type: "Pharmacy",
+      address: "Patna, Bihar",
+      contact: "+91 9123456780",
       position: [25.5932, 85.1368],
     },
     {
       id: 3,
-      name: "Community Hospital",
+      name: "🚑 Community Hospital",
+      type: "Hospital",
+      address: "Patna, Bihar",
+      contact: "+91 9988776655",
       position: [25.5968, 85.1401],
     },
   ];
@@ -59,7 +68,10 @@ function MapView() {
       <MapContainer
         center={userLocation}
         zoom={15}
-        style={{ height: "400px", width: "100%" }}
+        style={{
+          height: "400px",
+          width: "100%",
+        }}
       >
         <TileLayer
           attribution="&copy; OpenStreetMap contributors"
@@ -69,11 +81,11 @@ function MapView() {
         {/* User Location */}
         <Marker position={userLocation}>
           <Popup>
-            <b>Your Location</b>
+            <b>📍 Your Location</b>
           </Popup>
         </Marker>
 
-        {/* Resource Markers */}
+        {/* Health Resource Markers */}
         {resources.map((resource) => (
           <Marker
             key={resource.id}
@@ -84,7 +96,23 @@ function MapView() {
           >
             <Popup>
               <b>{resource.name}</b>
+
               <br />
+              <br />
+
+              <strong>Type:</strong> {resource.type}
+
+              <br />
+
+              <strong>Address:</strong> {resource.address}
+
+              <br />
+
+              <strong>Contact:</strong> {resource.contact}
+
+              <br />
+              <br />
+
               Click marker for directions.
             </Popup>
           </Marker>
@@ -98,14 +126,14 @@ function MapView() {
         )}
       </MapContainer>
 
-      {/* Directions Panel */}
+      {/* Directions */}
       {selectedResource && (
         <div
           style={{
             marginTop: "20px",
             padding: "15px",
             border: "1px solid #ccc",
-            borderRadius: "8px",
+            borderRadius: "10px",
           }}
         >
           <h3>Directions</h3>
