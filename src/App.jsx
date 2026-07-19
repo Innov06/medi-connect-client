@@ -4,6 +4,7 @@ import "./App.css";
 import ResourceList from "./components/ResourceList";
 import ConnectivityStatus from "./components/ConnectivityStatus";
 import PatientList from "./components/PatientList";
+import ReferralHistory from "./components/ReferralHistory";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -85,6 +86,7 @@ function App() {
       <ResourceList />
       <PatientList />
       <ConnectivityStatus />
+      <ReferralHistory />
     </div>
   );
 }
