@@ -15,7 +15,7 @@ ${referralLink}`;
 
     window.open(whatsappURL, "_blank");
 
-    setMessage("✅ WhatsApp opened successfully!");
+    setMessage("✅ Referral shared successfully via WhatsApp!");
   };
 
   const handleSMSShare = () => {
@@ -23,7 +23,7 @@ ${referralLink}`;
 
     window.location.href = smsURL;
 
-    setMessage("✅ SMS app opened successfully!");
+    setMessage("✅ Referral shared successfully via SMS!");
   };
 
   return (
@@ -50,15 +50,19 @@ ${referralLink}`;
       </button>
 
       {message && (
-        <p
+        <div
           style={{
-            color: "green",
             marginTop: "15px",
+            padding: "10px",
+            backgroundColor: "#e8f5e9",
+            border: "1px solid green",
+            borderRadius: "5px",
+            color: "green",
             fontWeight: "bold",
           }}
         >
           {message}
-        </p>
+        </div>
       )}
     </div>
   );
