@@ -1,3 +1,4 @@
+import MapView from "../components/MapView";
 import { useEffect, useState } from "react";
 import ShareButtons from "../components/ShareButtons";
 import { getReferralLink } from "../services/referralService";
@@ -72,6 +73,11 @@ function ReferralPage() {
       />
 
       <ShareButtons referralLink={referralLink} />
+
+      <h3>Nearby Health Resources</h3>
+
+<MapView />
+
     </div>
   );
 }
