@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import ShareButtons from "../components/ShareButtons";
 import { getReferralLink } from "../services/referralService";
+import { useTranslation } from "react-i18next";
+import i18n from "../i18n";
 
 function ReferralPage() {
   const [referralLink, setReferralLink] = useState("");
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchReferral = async () => {
@@ -13,6 +16,14 @@ function ReferralPage() {
 
     fetchReferral();
   }, []);
+
+  const changeToEnglish = () => {
+    i18n.changeLanguage("en");
+  };
+
+  const changeToHindi = () => {
+    i18n.changeLanguage("hi");
+  };
 
   return (
     <div
@@ -24,10 +35,21 @@ function ReferralPage() {
         borderRadius: "10px",
       }}
     >
-      <h2>Digital Referral Slip</h2>
+      <h2>{t("title")}</h2>
+
+      <div style={{ marginBottom: "20px" }}>
+        <button onClick={changeToEnglish}>English</button>
+
+        <button
+          onClick={changeToHindi}
+          style={{ marginLeft: "10px" }}
+        >
+          हिन्दी
+        </button>
+      </div>
 
       <p>
-        <strong>Patient:</strong> Rahul Kumar
+        <strong>{t("welcome")}:</strong> Rahul Kumar
       </p>
 
       <p>
@@ -35,7 +57,7 @@ function ReferralPage() {
       </p>
 
       <p>
-        <strong>Referral Link:</strong>
+        <strong>{t("share")}:</strong>
       </p>
 
       <input
