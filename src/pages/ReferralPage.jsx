@@ -1,4 +1,5 @@
 import MapView from "../components/MapView";
+import SymptomForm from "../components/SymptomForm";
 import { useEffect, useState } from "react";
 import ShareButtons from "../components/ShareButtons";
 import { getReferralLink } from "../services/referralService";
@@ -74,10 +75,13 @@ function ReferralPage() {
 
       <ShareButtons referralLink={referralLink} />
 
-      <h3>Nearby Health Resources</h3>
+      {/* Symptom Form */}
+      <SymptomForm />
 
-<MapView />
+      {/* Map */}
+      <h3 style={{ marginTop: "30px" }}>Nearby Health Resources</h3>
 
+      <MapView />
     </div>
   );
 }
