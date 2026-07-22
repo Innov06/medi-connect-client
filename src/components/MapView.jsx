@@ -45,13 +45,8 @@ function MapView() {
   const [directions, setDirections] = useState([]);
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
 
-
-  // Offline fallback
   useEffect(() => {
-
-    const handleOnline = () => {
-      setIsOffline(false);
-    };
+    const handleOnline = () => setIsOffline(false);
 
     const handleOffline = () => {
       setIsOffline(true);
@@ -63,12 +58,9 @@ function MapView() {
       }
     };
 
-
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
 
-
-    // Load cached directions if already offline
     if (!navigator.onLine) {
       const cached = localStorage.getItem("directions");
 
@@ -77,182 +69,184 @@ function MapView() {
       }
     }
 
-
     return () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
     };
-
   }, []);
 
-
-
   const handleSelect = (resource) => {
-
     setSelectedResource(resource);
 
     const steps = [
       t("step1"),
       t("step2"),
-      `${t("reach")} ${resource.name}.`,
+      `${t("reach")} ${resource.name}`,
     ];
-
 
     setDirections(steps);
 
-
-    // Save directions for offline use
-    localStorage.setItem(
-      "directions",
-      JSON.stringify(steps)
-    );
+    localStorage.setItem("directions", JSON.stringify(steps));
   };
-
 
   return (
     <>
-
-      <MapContainer
-        center={userLocation}
-        zoom={15}
+      <div
         style={{
-          height: "400px",
-          width: "100%",
+          borderRadius: "15px",
+          overflow: "hidden",
+          boxShadow: "0 8px 20px rgba(0,0,0,.15)",
         }}
       >
-
-        <TileLayer
-          attribution="&copy; OpenStreetMap contributors"
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-
-
-        {/* User Location */}
-        <Marker position={userLocation}>
-          <Popup>
-            <b>📍 Your Location</b>
-          </Popup>
-        </Marker>
-
-
-
-        {/* Health Resources */}
-        {resources.map((resource) => (
-
-          <Marker
-            key={resource.id}
-            position={resource.position}
-            eventHandlers={{
-              click: () => handleSelect(resource),
-            }}
-          >
-
-            <Popup>
-
-              <b>{resource.name}</b>
-
-              <br />
-              <br />
-
-              <strong>Type:</strong> {resource.type}
-
-              <br />
-
-              <strong>Address:</strong> {resource.address}
-
-              <br />
-
-              <strong>Contact:</strong> {resource.contact}
-
-              <br />
-              <br />
-
-              Click marker for directions.
-
-            </Popup>
-
-          </Marker>
-
-        ))}
-
-
-
-        {/* Route Line */}
-        {selectedResource && (
-
-          <Polyline
-            positions={[
-              userLocation,
-              selectedResource.position
-            ]}
-          />
-
-        )}
-
-
-      </MapContainer>
-
-
-
-      {/* Directions Panel */}
-
-      {selectedResource && (
-
-        <div
+        <MapContainer
+          center={userLocation}
+          zoom={15}
           style={{
-            marginTop:"20px",
-            padding:"15px",
-            border:"1px solid #ccc",
-            borderRadius:"10px",
+            height: "450px",
+            width: "100%",
           }}
         >
+          <TileLayer
+            attribution="© OpenStreetMap contributors"
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
 
-          <h3>
-            {t("directions")}
-          </h3>
+          {/* User Location */}
+          <Marker position={userLocation}>
+            <Popup>
+              <div style={{ minWidth: "180px" }}>
+                <h3 style={{ color: "#1976d2" }}>
+                  📍 Your Location
+                </h3>
 
+                <p>
+                  Current Position
+                </p>
+              </div>
+            </Popup>
+          </Marker>
+
+          {/* Resource Markers */}
+          {resources.map((resource) => (
+            <Marker
+              key={resource.id}
+              position={resource.position}
+              eventHandlers={{
+                click: () => handleSelect(resource),
+              }}
+            >
+              <Popup>
+                <div style={{ minWidth: "220px" }}>
+                  <h3
+                    style={{
+                      color: "#2E7D32",
+                    }}
+                  >
+                    {resource.name}
+                  </h3>
+
+                  <hr />
+
+                  <p>
+                    <strong>🏷 Type:</strong>{" "}
+                    {resource.type}
+                  </p>
+
+                  <p>
+                    <strong>📍 Address:</strong>{" "}
+                    {resource.address}
+                  </p>
+
+                  <p>
+                    <strong>📞 Contact:</strong>{" "}
+                    {resource.contact}
+                  </p>
+
+                  <hr />
+
+                  <p
+                    style={{
+                      color: "#1976d2",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Click marker to get directions
+                  </p>
+                </div>
+              </Popup>
+            </Marker>
+          ))}
+
+          {selectedResource && (
+            <Polyline
+              positions={[
+                userLocation,
+                selectedResource.position,
+              ]}
+              pathOptions={{
+                color: "#1976d2",
+                weight: 5,
+              }}
+            />
+          )}
+        </MapContainer>
+      </div>
+
+      {/* Direction Panel */}
+
+      {selectedResource && (
+        <div
+          style={{
+            marginTop: "25px",
+            background: "#ffffff",
+            padding: "20px",
+            borderRadius: "15px",
+            boxShadow: "0 5px 20px rgba(0,0,0,.1)",
+          }}
+        >
+          <h2
+            style={{
+              color: "#1565C0",
+            }}
+          >
+            🧭 {t("directions")}
+          </h2>
 
           {isOffline && (
-
-            <p>
-              ⚠ Offline mode: Showing cached directions
-            </p>
-
+            <div
+              style={{
+                background: "#FFF3CD",
+                color: "#856404",
+                padding: "10px",
+                borderRadius: "8px",
+                marginBottom: "15px",
+              }}
+            >
+              ⚠ Offline Mode - Showing Cached Directions
+            </div>
           )}
 
-
-
           <p>
-
             <strong>
-              {t("destination")}:
-            </strong>
-
-            {" "}
-
+              🎯 {t("destination")}:
+            </strong>{" "}
             {selectedResource.name}
-
           </p>
 
-
-
           <ol>
-
-            {directions.map((step,index)=>(
-
-              <li key={index}>
+            {directions.map((step, index) => (
+              <li
+                key={index}
+                style={{
+                  marginBottom: "10px",
+                }}
+              >
                 {step}
               </li>
-
             ))}
-
           </ol>
-
-
         </div>
-
       )}
-
     </>
   );
 }

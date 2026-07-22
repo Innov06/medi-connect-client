@@ -8,6 +8,7 @@ import i18n from "../i18n";
 
 function ReferralPage() {
   const [referralLink, setReferralLink] = useState("");
+  const [aiSuggestion, setAiSuggestion] = useState("");
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -27,18 +28,29 @@ function ReferralPage() {
     i18n.changeLanguage("hi");
   };
 
+  // Demo AI Recommendation
+  const generateSuggestion = () => {
+    const symptoms = "Fever, Cough";
+
+    if (
+      symptoms.toLowerCase().includes("fever") &&
+      symptoms.toLowerCase().includes("cough")
+    ) {
+      setAiSuggestion(
+        "🤖 AI Recommendation: Possible viral infection. Drink plenty of water, take rest, monitor temperature, and visit the nearest Primary Health Center if symptoms continue."
+      );
+    } else {
+      setAiSuggestion(
+        "🤖 AI Recommendation: Please consult your nearest healthcare center."
+      );
+    }
+  };
+
   return (
-    <div
-      style={{
-        maxWidth: "600px",
-        margin: "40px auto",
-        padding: "20px",
-        border: "1px solid #ddd",
-        borderRadius: "10px",
-      }}
-    >
+    <div className="app-container">
       <h2>{t("title")}</h2>
 
+      {/* Language Buttons */}
       <div style={{ marginBottom: "20px" }}>
         <button onClick={changeToEnglish}>English</button>
 
@@ -50,14 +62,18 @@ function ReferralPage() {
         </button>
       </div>
 
-      <p>
-        <strong>{t("welcome")}:</strong> Rahul Kumar
-      </p>
+      {/* Patient Details */}
+      <div className="info-card">
+        <p>
+          <strong>👤 {t("welcome")}:</strong> Rahul Kumar
+        </p>
 
-      <p>
-        <strong>Symptoms:</strong> Fever, Cough
-      </p>
+        <p>
+          <strong>🤒 Symptoms:</strong> Fever, Cough
+        </p>
+      </div>
 
+      {/* Referral Link */}
       <p>
         <strong>{t("share")}:</strong>
       </p>
@@ -66,20 +82,37 @@ function ReferralPage() {
         type="text"
         value={referralLink}
         readOnly
-        style={{
-          width: "100%",
-          padding: "8px",
-          marginBottom: "20px",
-        }}
       />
 
       <ShareButtons referralLink={referralLink} />
 
+      {/* AI Section */}
+      <div
+        className="direction-box"
+        style={{ marginTop: "30px" }}
+      >
+        <h3>🤖 AI Health Assistant</h3>
+
+        <button onClick={generateSuggestion}>
+          Get AI Recommendation
+        </button>
+
+        {aiSuggestion && (
+          <div className="success-message">
+            {aiSuggestion}
+          </div>
+        )}
+      </div>
+
       {/* Symptom Form */}
-      <SymptomForm />
+      <div style={{ marginTop: "35px" }}>
+        <SymptomForm />
+      </div>
 
       {/* Map */}
-      <h3 style={{ marginTop: "30px" }}>Nearby Health Resources</h3>
+      <h3 style={{ marginTop: "35px" }}>
+        🏥 Nearby Health Resources
+      </h3>
 
       <MapView />
     </div>
